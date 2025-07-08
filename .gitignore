@@ -1,4 +1,4 @@
-/data
+# /data  # Temporarily commented out for test branch
 # /keys  # Temporarily commented out for test branch
 /target
 /volumes
