@@ -1,0 +1,71 @@
+services:
+  oracle:
+    image: sundaeswap/butane-oracle:latest
+    command: ["./oracles", "-c", "/app/config.yaml"]
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./keys:/app/keys
+      - ./data:/app/data
+    environment:
+      KEYS_DIRECTORY: /app/keys
+      DATA_DIRECTORY: /app/data
+    env_file:
+      - path: .env
+        required: false
+    healthcheck:
+      test: wget --spider http://127.0.0.1:18000/health || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 1
+    ports:
+      - 31415:31415
+      - 18000:18000
+    restart: unless-stopped
+  cardano-node:
+    command:
+      [
+        run,
+        --config,
+        /config/config.json,
+        --topology,
+        /config/topology.json,
+        --database-path,
+        /data,
+        --socket-path,
+        /ipc/socket,
+      ]
+    entrypoint: cardano-node
+    image: ghcr.io/intersectmbo/cardano-node:8.9.1
+    profiles: ["standalone"]
+    volumes:
+      - ./mainnet-config:/config
+      - ./volumes/cardano-node-data:/data
+      - ${IPC_DIR:-./volumes/node-ipc}:/ipc
+  kupo:
+    command: [
+        --node-socket,
+        /ipc/socket,
+        --node-config,
+        /config/config.json,
+        --since,
+        49962542.b0f61babba6e357eee78cc4e55045a683eda0f1330a28333b6dc5af5320e3f76,
+        --host,
+        "0.0.0.0",
+        --match,
+        "e0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312b/*", # sundae
+        --match,
+        "e1317b152faac13426e6a83e06ff88a4d62cce3c1634ab0a5ec13309/*", # minswap
+        --match,
+        "6b9c456aa650cb808a9ab54326e039d5235ed69f069c9664a8fe5b69/*", # spectrum
+        --workdir,
+        /db,
+        --defer-db-indexes,
+        --prune-utxo,
+      ]
+    image: cardanosolutions/kupo
+    expose:
+      - "1442"
+    volumes:
+      - ./mainnet-config:/config
+      - ./volumes/kupo-db:/db
+      - ${IPC_DIR:-./volumes/node-ipc}:/ipc

@@ -1,3 +1,5 @@
+# Node 1 Configuration
+# Inherits from config.base.yaml
 api_port: 8080 # Port to serve API requests
 network_port: 31415 # Port to handle traffic from other nodes
 health_port: 18000 # Port to report our health status
@@ -209,3 +211,12 @@ splash:
   max_concurrency: 3
   retries: 3
   timeout_ms: 5000
+
+# List all peer nodes
+peers:
+  - address: node0:31415
+    label: Node 0
+    public_key: |
+      -----BEGIN PUBLIC KEY-----
+      MCowBQYDK2VwAyEAcy9bHPCRq4fkgB1hBHn/mjBIOAEqZfqN3Mew+A3q0FU=
+      -----END PUBLIC KEY-----
