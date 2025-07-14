@@ -20,7 +20,7 @@ frost_address: addr1v8eh3vtc30n055hz7cn5us8w3lqgmuzcsrs259q64qsh8uqlzgc6r
   # This is the address of your current FROST public key. The key generation process will print it.
   # Every node must agree on this.
 kupo:
-  kupo_address: https://kupo1r7fj2mt03kdxwwnqkn0.mainnet-v2.kupo-m1.dmtr.host
+  kupo_address: https://kupo-testnet.up.railway.app
   retries: 3
   timeout_ms: 5000
 logs:
@@ -211,6 +211,13 @@ splash:
   max_concurrency: 3
   retries: 3
   timeout_ms: 5000
+cswap:
+  pools:
+    - token: ANGELS
+      unit: ADA
+      credential: ed97e0a1394724bb7cb94f20acf627abc253694c92b88bf8fb4b7f6f/*
+      asset_id: 6f1073916b3a51446ab380304ca42215c8df032c63af66a07cda086a.63
+  max_concurrency: 3
 
 # List all peer nodes
 peers:
